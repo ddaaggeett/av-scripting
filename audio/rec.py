@@ -1,17 +1,18 @@
-#!/usr/bin/env python3
-"""Create a recording with arbitrary duration.
-
-PySoundFile (https://github.com/bastibe/PySoundFile/) has to be installed!
-
+# python3.6
+"""
+TODO:
+    $ pip3 install soudfile
+    $ pip3 install sounddevice
+    $ python3.6 rec.py
 """
 import argparse
 import tempfile
 import queue
 import sys
 
-MICROPHONE = 0
-# MICROPHONE = 'Blue Snowball'
-AUDIO_CAPTURES = 'audio/captures'
+# MICROPHONE = 0
+MICROPHONE = 'Blue Snowball'
+AUDIO_CAPTURES = 'captures'
 
 
 def int_or_str(text):
@@ -70,8 +71,8 @@ def recordAudio():
 
         def callback(indata, frames, time, status):
             """This is called (from a separate thread) for each audio block."""
-            if status:
-                print(status, file=sys.stderr)
+            # if status:
+            #     print(status, file=sys.stderr)
             q.put(indata.copy())
 
         # Make sure the file is opened before recording anything:
@@ -99,5 +100,5 @@ record AUDIO
 
 $ python record.py [stream | <capture_id>]
 '''
-if __name__ == "__recordAudio__":
+if __name__ == "__main__":
     recordAudio()

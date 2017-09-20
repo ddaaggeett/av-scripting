@@ -1,5 +1,5 @@
-import audio.record as audio
-import visual.record as video
+import audio.rec as audio
+import visual.rec as video
 
 import _thread
 

@@ -43,7 +43,7 @@ parser.add_argument(
     '-t', '--subtype', type=str, help='sound file subtype (e.g. "PCM_24")')
 args = parser.parse_args()
 
-def recordAudio():
+def recordAudio(a_name):
     try:
         import sounddevice as sd
         import soundfile as sf
@@ -67,9 +67,11 @@ def recordAudio():
             device_info = sd.query_devices(args.device, 'input')
             # soundfile expects an int, sounddevice provides a float:
             args.samplerate = int(device_info['default_samplerate'])
-        if args.filename is None:
-            args.filename = tempfile.mktemp(prefix='audio_',
-                                            suffix='.wav', dir=AUDIO_CAPTURES)
+        if args.filename != None:
+            args.filename = tempfile.mktemp(prefix='', suffix='.wav', dir=AUDIO_CAPTURES)
+        else:
+            args.filename = 'audio/captures/' + a_name + '.wav'
+
         q = queue.Queue()
 
         def callback(indata, frames, time, status):

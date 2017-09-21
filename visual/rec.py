@@ -17,7 +17,7 @@ def captureStreamOnly():
 
         # Our operations on the frame come here
 
-        some = cv2.resize(frame, (480, 270))                    # Resize image
+        some = cv2.resize(frame, (480, 270))  # Resize image
 
         gray = cv2.cvtColor(some, cv2.COLOR_BGR2GRAY)
 
@@ -34,6 +34,8 @@ def recordVideo(id):
     opens webcam, begins streaming and saves to file id
     '''
 
+
+
     try:
         FILE_OUTPUT = "visual/captures/" + id + '.mp4'
     except:
@@ -47,9 +49,14 @@ def recordVideo(id):
 
     cap = cv2.VideoCapture(0)
 
+    # important for out to equal the specs of the camera device
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    height = int(cap.get(4)) # 4 is height index
+    width = int(cap.get(3)) # 4 is width index
+
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(FILE_OUTPUT,fourcc, 20.0, (1280, 720)) # frame must equal the camera dimensions
+    out = cv2.VideoWriter(FILE_OUTPUT,fourcc, fps, (width, height)) # frame must equal the camera dimensions
 
     while(cap.isOpened()):
         ret, frame = cap.read()

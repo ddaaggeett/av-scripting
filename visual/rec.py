@@ -34,7 +34,10 @@ def recordVideo(id):
     opens webcam, begins streaming and saves to file id
     '''
 
-    FILE_OUTPUT = "captures/" + id + '.mp4'
+    try:
+        FILE_OUTPUT = "visual/captures/" + id + '.mp4'
+    except:
+        FILE_OUTPUT = "captures/" + id + '.mp4'
 
     # Checks and deletes the output file
     # You cant have a existing file or it will through an error
@@ -75,4 +78,7 @@ record VIDEO
 $ python record.py [stream | <capture_id>]
 '''
 if __name__ == "__main__":
-    recordVideo(sys.argv[1])
+    if len(sys.argv) > 1:
+        recordVideo(sys.argv[1])
+    else:
+        captureStreamOnly()

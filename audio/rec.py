@@ -7,12 +7,15 @@ TODO:
 """
 import argparse
 import tempfile
-import queue
+try:
+    import Queue
+except:
+    import queue
 import sys
 
-# MICROPHONE = 0
-MICROPHONE = 'Blue Snowball'
-AUDIO_CAPTURES = 'captures'
+MICROPHONE = 0
+# MICROPHONE = 'Blue Snowball'
+AUDIO_CAPTURES = 'audio/captures'
 
 
 def int_or_str(text):
@@ -78,13 +81,22 @@ def recordAudio():
         # Make sure the file is opened before recording anything:
         with sf.SoundFile(args.filename, mode='x', samplerate=args.samplerate,
                           channels=args.channels, subtype=args.subtype) as file:
-            with sd.InputStream(samplerate=args.samplerate, device=MICROPHONE,
+            try:
+                with sd.InputStream(samplerate=args.samplerate, device='Blue Snowball',
                                 channels=args.channels, callback=callback):
-                print('#' * 80)
-                print('press Ctrl+C to stop the recording')
-                print('#' * 80)
-                while True:
-                    file.write(q.get())
+                    print('#' * 80)
+                    print('press Ctrl+C to stop the recording')
+                    print('#' * 80)
+                    while True:
+                        file.write(q.get())
+            except:
+                with sd.InputStream(samplerate=args.samplerate, device=0,
+                                channels=args.channels, callback=callback):
+                    print('#' * 80)
+                    print('press Ctrl+C to stop the recording')
+                    print('#' * 80)
+                    while True:
+                        file.write(q.get())
 
     except KeyboardInterrupt:
 

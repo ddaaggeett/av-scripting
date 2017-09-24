@@ -3,7 +3,6 @@
     $ pip3 install -r requirements.txt
     $ python3.6 index.py
 
-you may need to create a couple directories
+you may need to create a directories
 
-    ./audio/captures/
-    ./visual/captures/
+    ./data/

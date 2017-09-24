@@ -1,6 +1,7 @@
 *.wav
 *.mp4
 *.mov
+*.avi
 *.pyc
 __pycache__
 data

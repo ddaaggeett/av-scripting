@@ -70,12 +70,6 @@ def recordAudio(a_name=TEST_NAME):
         # You cant have a existing file or it will through an error
         if os.path.isfile(newFile):
             os.remove(newFile)
-
-
-        # print(subprocess.call('adb devices', shell=True))
-        # # print(subprocess.call('adb shell "am start -a android.media.action.VIDEO_CAPTURE"', shell=True)) # start the video camera
-        # print(subprocess.call('adb shell input keyevent 66', shell=True))
-
         if args.list_devices:
             print(sd.query_devices())
             parser.exit(0)

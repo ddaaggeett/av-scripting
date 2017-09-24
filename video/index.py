@@ -4,6 +4,11 @@ import numpy as np
 import cv2
 import os, sys
 
+VIDEO_CAPTURES = 'data/'
+FILE_EXTENSION = ".mp4"
+TEST_NAME = "_test_video"
+
+
 def captureStreamOnly():
     '''
     opens webcam and begins streaming
@@ -29,22 +34,26 @@ def captureStreamOnly():
     cap.release()
     cv2.destroyAllWindows()
 
-def recordVideo(id):
+def recordVideo(a_name=TEST_NAME):
     '''
-    opens webcam, begins streaming and saves to file id
+    opens webcam, begins streaming and saves to file a_name
     '''
 
 
 
-    try:
-        FILE_OUTPUT = "visual/captures/" + id + '.mp4'
-    except:
-        FILE_OUTPUT = "captures/" + id + '.mp4'
+    if a_name == TEST_NAME:
+        print("\nvideo test\n")
+        newFile = a_name + FILE_EXTENSION
+    else:
+        print("\ninit video capture\n")
+        newFile = VIDEO_CAPTURES + a_name + FILE_EXTENSION
+
+
 
     # Checks and deletes the output file
     # You cant have a existing file or it will through an error
-    if os.path.isfile(FILE_OUTPUT):
-        os.remove(FILE_OUTPUT)
+    if os.path.isfile(newFile):
+        os.remove(newFile)
 
 
     cap = cv2.VideoCapture(0)
@@ -56,7 +65,7 @@ def recordVideo(id):
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(FILE_OUTPUT,fourcc, fps, (width, height)) # frame must equal the camera dimensions
+    out = cv2.VideoWriter(newFile,fourcc, fps, (width, height)) # frame must equal the camera dimensions
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -85,7 +94,4 @@ record VIDEO
 $ python record.py [stream | <capture_id>]
 '''
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        recordVideo(sys.argv[1])
-    else:
-        captureStreamOnly()
+    recordVideo()

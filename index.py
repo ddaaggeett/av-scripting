@@ -1,9 +1,9 @@
-# python3.6
+#!/usr/bin/python
 
 import multiprocessing
 import time
-import audio.rec as audio
-import visual.rec as video
+import audio.index as audio
+import visual.index as video
 
 stamp = time.strftime('%Y%m%d%H%M%S')
 

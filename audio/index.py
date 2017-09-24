@@ -1,4 +1,4 @@
-# python3.6
+#!/usr/bin/python
 """
 TODO:
     $ pip3 install soudfile
@@ -11,11 +11,13 @@ try:
     import Queue
 except:
     import queue
-import sys
+import sys, os
 
 MICROPHONE = 0
 # MICROPHONE = 'Blue Snowball'
-AUDIO_CAPTURES = 'audio/captures'
+AUDIO_CAPTURES = 'data/'
+FILE_EXTENSION = ".wav"
+TEST_NAME = "_test_audio"
 
 
 def int_or_str(text):
@@ -43,17 +45,31 @@ parser.add_argument(
     '-t', '--subtype', type=str, help='sound file subtype (e.g. "PCM_24")')
 args = parser.parse_args()
 
-def recordAudio(a_name):
+def recordAudio(a_name=TEST_NAME):
+    '''
+    video control
+    make sure the android video camera is already pointed to subject
+    '''
+
+    import sounddevice as sd
+    import soundfile as sf
+
     try:
-        import sounddevice as sd
-        import soundfile as sf
 
 
-        '''
-        video control
-        make sure the android video camera is already pointed to subject
-        '''
-        import subprocess
+        if a_name == TEST_NAME:
+            print("\naudio test\n")
+            newFile = a_name + FILE_EXTENSION
+        else:
+            print("\ninit audio capture\n")
+            newFile = AUDIO_CAPTURES + a_name + FILE_EXTENSION
+
+
+
+        # Checks and deletes the output file
+        # You cant have a existing file or it will through an error
+        if os.path.isfile(newFile):
+            os.remove(newFile)
 
 
         # print(subprocess.call('adb devices', shell=True))
@@ -68,9 +84,9 @@ def recordAudio(a_name):
             # soundfile expects an int, sounddevice provides a float:
             args.samplerate = int(device_info['default_samplerate'])
         if args.filename != None:
-            args.filename = tempfile.mktemp(prefix='', suffix='.wav', dir=AUDIO_CAPTURES)
+            args.filename = tempfile.mktemp(prefix='test_', suffix='.wav', dir='')
         else:
-            args.filename = 'audio/captures/' + a_name + '.wav'
+            args.filename = newFile
 
         q = queue.Queue()
 
@@ -110,9 +126,11 @@ def recordAudio(a_name):
 
 
 '''
-record AUDIO
+record audio
 
-$ python record.py [stream | <capture_id>]
+test:
+
+    $ cd ../../ && python ./audio/rec.py <file_name>
 '''
 if __name__ == "__main__":
     recordAudio()

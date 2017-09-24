@@ -90,8 +90,6 @@ def recordVideo(a_name=TEST_NAME):
 
 '''
 record VIDEO
-
-$ python record.py [stream | <capture_id>]
 '''
 if __name__ == "__main__":
     recordVideo()

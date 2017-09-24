@@ -13,8 +13,8 @@ except:
     import queue
 import sys, os
 
-MICROPHONE = 0
-# MICROPHONE = 'Blue Snowball'
+# MICROPHONE = 0
+MICROPHONE = 'Blue Snowball'
 AUDIO_CAPTURES = 'data/'
 FILE_EXTENSION = ".wav"
 TEST_NAME = "_test_audio"
@@ -54,6 +54,11 @@ def recordAudio(a_name=TEST_NAME):
     import sounddevice as sd
     import soundfile as sf
 
+    sd.default.device = MICROPHONE
+    sd.default.channels = [1,0]
+    sd.default.latency = 'low'
+    sd.default.samplerate = 44100
+
     try:
 
 
@@ -74,7 +79,7 @@ def recordAudio(a_name=TEST_NAME):
             print(sd.query_devices())
             parser.exit(0)
         if args.samplerate is None:
-            device_info = sd.query_devices(args.device, 'input')
+            device_info = sd.query_devices(sd.default.device, 'input')
             # soundfile expects an int, sounddevice provides a float:
             args.samplerate = int(device_info['default_samplerate'])
         if args.filename != None:
@@ -91,24 +96,13 @@ def recordAudio(a_name=TEST_NAME):
             q.put(indata.copy())
 
         # Make sure the file is opened before recording anything:
-        with sf.SoundFile(args.filename, mode='x', samplerate=args.samplerate,
-                          channels=args.channels, subtype=args.subtype) as file:
-            try:
-                with sd.InputStream(samplerate=args.samplerate, device='Blue Snowball',
-                                channels=args.channels, callback=callback):
-                    print('#' * 80)
-                    print('press Ctrl+C to stop the recording')
-                    print('#' * 80)
-                    while True:
-                        file.write(q.get())
-            except:
-                with sd.InputStream(samplerate=args.samplerate, device=0,
-                                channels=args.channels, callback=callback):
-                    print('#' * 80)
-                    print('press Ctrl+C to stop the recording')
-                    print('#' * 80)
-                    while True:
-                        file.write(q.get())
+        with sf.SoundFile(args.filename, mode='x', samplerate=args.samplerate, channels=args.channels, subtype=args.subtype) as file:
+            with sd.InputStream(samplerate=args.samplerate, device=sd.default.device, channels=args.channels, callback=callback):
+                print('#' * 80)
+                print('press Ctrl+C to stop the recording')
+                print('#' * 80)
+                while True:
+                    file.write(q.get())
 
     except KeyboardInterrupt:
 
@@ -121,10 +115,6 @@ def recordAudio(a_name=TEST_NAME):
 
 '''
 record audio
-
-test:
-
-    $ cd ../../ && python ./audio/rec.py <file_name>
 '''
 if __name__ == "__main__":
     recordAudio()

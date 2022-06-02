@@ -10,7 +10,7 @@ cycler==0.10.0
 decorator==4.1.2
 entrypoints==0.2.3
 hashids==1.2.0
-html5lib==0.9999999
+html5lib==0.99999999
 idna==2.5
 inflection==0.3.1
 ipykernel==4.6.1
